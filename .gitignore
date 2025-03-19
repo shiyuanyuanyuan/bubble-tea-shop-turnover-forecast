@@ -1,0 +1,19 @@
+// python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+
+// macos
+.DS_Store
+
+
+// env files
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+.env.test.local
