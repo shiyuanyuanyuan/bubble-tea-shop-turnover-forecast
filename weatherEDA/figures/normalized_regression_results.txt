@@ -1,0 +1,12 @@
+Multiple Linear Regression: Normalized Sales vs Weather Factors
+==================================================
+
+R-squared: 0.0086
+
+Coefficients:
+         Feature  Coefficient
+Temperature (°C)     0.047976
+ Rainfall (mm/h)     0.049962
+ Cloud Cover (%)    -0.006999
+
+Note: This analysis controls for hour of day and weekend effects by using normalized sales.
