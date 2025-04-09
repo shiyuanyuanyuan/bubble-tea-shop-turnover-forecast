@@ -51,11 +51,6 @@ promo_data = preprocess_datetime_hour(promo_data)
 # Select and rename promotion features to avoid conflicts
 promo_data = promo_data[['date', 'hour', 'isPromotion']]
 
-
-# Add promotion impact feature (can be optionally kept or removed)
-sales_data_dec = calculate_promotion_impact(sales_data_dec)
-sales_data_feb = calculate_promotion_impact(sales_data_feb)
-
 # Merge all data
 def merge_all_data(sales_df, event_df, weather_df, promo_df):
     # Ensure merge key types are consistent (date: datetime, hour: string)
@@ -225,7 +220,7 @@ if y_test is not None:
     plt.savefig(data_path('prediction_results_v2.png'))
     plt.close()
     # Chart prediction_results_v2.png has been saved
-    print("Chart prediction_results_v2.png has been saved")
+    print("\nChart prediction_results_v2.png has been saved")
 
 # Save prediction results
 results_df = pd.DataFrame({
@@ -237,8 +232,8 @@ results_df = pd.DataFrame({
 })
 if y_test is not None:
     results_df['Difference'] = results_df['Actual'] - results_df['Predicted']
-# Original promotion impact factor
-results_df['Promotion_Impact'] = test_data['promotion_impact']
+# Original promotion impact factor - Commented out as column no longer exists
+# results_df['Promotion_Impact'] = test_data['promotion_impact']
 # New promotion flag
 results_df['isPromotion'] = test_data['isPromotion']
 # Optionally add weather features to the results file
@@ -247,4 +242,4 @@ results_df['isPromotion'] = test_data['isPromotion']
 # Save with new filename
 results_df.to_csv(data_path('prediction_results_v2.csv'), index=False)
 # Prediction results saved to prediction_results_v2.csv
-print("Prediction results saved to prediction_results_v2.csv") 
+print("\nPrediction results saved to prediction_results_v2.csv") 
