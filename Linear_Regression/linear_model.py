@@ -9,19 +9,41 @@ from sklearn.preprocessing import StandardScaler
 
 
 # === Load and Clean Data ===
-df = pd.read_csv("final_merged_for_model.csv").dropna()
+df = pd.read_csv("processed_data_1.csv").dropna()
 
 # Convert date to datetime first
 df['date'] = pd.to_datetime(df['date'])
 
 # Create train and test sets based on date ranges
 train_mask = (df['date'] >= '2024-12-01') & (df['date'] <= '2025-01-31')
-test_mask = (df['date'] >= '2025-02-01') & (df['date'] < '2025-03-01')
+test_mask = (df['date'] >= '2025-02-01') & (df['date'] <= '2025-02-28')
+
+
+# select the features
+features = [
+        "tempreture",  # temperature
+        "isPromotion",  # discount (50% & 20%)
+        "isEvent",  # isEvent
+        "isHoliday",  # isHoliday
+        "Rain",  # weather_rain
+        "Fog",  # weather_fog
+        "Clouds",  # weather_cloudy
+        "Clear",  # weather_clear
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat",
+        "Sun",  # weekdays
+    ] + [f"hour_{h}" for h in range(11, 22)]  # hours
+print(features)
 
 # Split features and target AFTER creating masks
-X = df.drop(columns=["amount", "date"])  # Now drop both amount and date
+X = df[features]
 y = df["amount"]
 
+# split the data into train and test
 X_train = X[train_mask]
 X_test = X[test_mask]
 y_train = y[train_mask]
@@ -61,16 +83,18 @@ print(coef_summary)
 # === Plotting ===
 comparison_df = pd.DataFrame({
     "Actual": y_test.values,
-    "Predicted": y_pred
+    "Predicted": y_pred,
+    "date": df[test_mask]["date"]  # Add the date column
 }).reset_index(drop=True)
 
 plt.figure(figsize=(14, 6))
-plt.plot(comparison_df["Actual"], label="Actual", marker='o', linestyle='-')
-plt.plot(comparison_df["Predicted"], label="Predicted", marker='x', linestyle='--')
+plt.plot(comparison_df["date"], comparison_df["Actual"], label="Actual", marker='o', linestyle='-')
+plt.plot(comparison_df["date"], comparison_df["Predicted"], label="Predicted", marker='x', linestyle='--')
 plt.title("Actual vs Predicted Bubble Tea Sales (Ridge Regression)")
-plt.xlabel("Test Sample Index")
+plt.xlabel("Date")
 plt.ylabel("Amount ($)")
 plt.legend()
 plt.grid(True)
+plt.xticks(rotation=45)  # Rotate date labels for better readability
 plt.tight_layout()
 plt.show()
